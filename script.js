@@ -1,33 +1,76 @@
 const pai = document.getElementById('eventos-pai');
-const botaoConverter = document.getElementById('converter-btn');
-
 
 pai.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log(e.target.id);
-});
-
-//formula conversor de velocidade km/h para milhas por hora (mph):
-
-function kmhParaMph(kmh) {
-    const mph = kmh / 1.609;
-    return mph;
-}
-
-const velocidadeKmh = 100;
-const velocidadeMph = kmhParaMph(velocidadeKmh);
-console.log(`${velocidadeKmh} km/h é igual a ${velocidadeMph.toFixed(2)} mph.`);
-
-//quando apertar o botão, a função kmhParaMph é chamada, convertendo a velocidade de km/h para mph e exibindo o resultado no console.
-
-botaoConverter.addEventListener('click', () => {
-    const inputKmh = document.getElementById('input-kmh');
-    const kmhValue = parseFloat(inputKmh.value);
-    
-    if (!isNaN(kmhValue)) {
-        const mphValue = kmhParaMph(kmhValue);
-        console.log(`${kmhValue} km/h é igual a ${mphValue.toFixed(2)} mph.`);
+    const id = e.target.id;
+    console.log(id);
+    if (id === 'velocidade') {
+        calculoVelocidade();
     } else {
-        console.log('Por favor, insira um valor numérico válido para km/h.');
+        clearMain();
     }
 });
+
+// conversor de velocidade km/h para milhas por hora (mph)
+function kmhParaMph(kmh) {
+    return kmh / 1.609;
+}
+
+function mphParaKmh(mph) {
+    return mph * 1.609;
+}
+
+function clearMain() {
+    const main = document.querySelector('main');
+    if (main) main.innerHTML = '<h2>Painel de Ferramentas</h2>';
+}
+
+function calculoVelocidade() {
+    const main = document.querySelector('main');
+    if (!main) return;
+
+    main.innerHTML = `
+        <h2>Calculadora de Velocidade</h2>
+        <div class="calc-vel">
+            <label for="input-vel">Valor de velocidade:</label>
+            <input id="input-vel" type="number" step="any" />
+            <div class="botoes-velocidade">
+                <button id="converter-kmh-mph">Converter km/h para mph</button>
+                <button id="converter-mph-kmh">Converter mph para km/h</button>
+            </div>
+            <p id="resultado-velocidade"></p>
+        </div>
+    `;
+
+    const btnKmhToMph = document.getElementById('converter-kmh-mph');
+    const btnMphToKmh = document.getElementById('converter-mph-kmh');
+    const resultadoEl = document.getElementById('resultado-velocidade');
+
+    if (btnKmhToMph) {
+        btnKmhToMph.addEventListener('click', () => {
+            const inputVel = document.getElementById('input-vel');
+            const kmhValue = parseFloat(inputVel.value);
+
+            if (!isNaN(kmhValue)) {
+                const mphValue = kmhParaMph(kmhValue);
+                resultadoEl.textContent = `${kmhValue} km/h é igual a ${mphValue.toFixed(2)} mph.`;
+            } else {
+                resultadoEl.textContent = 'Por favor, insira um valor numérico válido.';
+            }
+        });
+    }
+
+    if (btnMphToKmh) {
+        btnMphToKmh.addEventListener('click', () => {
+            const inputVel = document.getElementById('input-vel');
+            const mphValue = parseFloat(inputVel.value);
+
+            if (!isNaN(mphValue)) {
+                const kmhValue = mphParaKmh(mphValue);
+                resultadoEl.textContent = `${mphValue} mph é igual a ${kmhValue.toFixed(2)} km/h.`;
+            } else {
+                resultadoEl.textContent = 'Por favor, insira um valor numérico válido.';
+            }
+        });
+    }
+}

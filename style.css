@@ -63,7 +63,7 @@ header {
     transform: translateX(6px) scale(1.04);
 }
 
-.main-content {
+.main {
     margin-left: 260px;
     padding: 110px 30px 30px 30px;
     width: 100%;
