@@ -5,7 +5,9 @@ pai.addEventListener('click', (e) => {
     if (!link || !pai.contains(link)) return;
     e.preventDefault();
     const id = link.id;
-    if (id === 'velocidade') {
+    if (id === 'imc') {
+        calculoImc();
+    } else if (id === 'velocidade') {
         calculoVelocidade();
     } else if (id === 'massa') {
         calculoMassa();
@@ -85,6 +87,65 @@ function calculoVelocidade() {
                 resultadoEl.textContent = 'Por favor, insira um valor numérico válido.';
             }
         });
+    }
+}
+
+function calcularCategoriaImc(imc) {
+    if (imc < 18.5) return 'Abaixo do peso';
+    if (imc < 25) return 'Peso normal';
+    if (imc < 30) return 'Sobrepeso';
+    return 'Obesidade';
+}
+
+function calculoImc() {
+    const main = document.querySelector('main');
+    if (!main) return;
+
+    main.innerHTML = `
+        <h2>Calculadora de IMC</h2>
+        <div class="calc-imc">
+            <label for="input-peso">Peso (kg):</label>
+            <input id="input-peso" type="number" step="any" />
+            <label for="input-altura">Altura (m):</label>
+            <input id="input-altura" type="number" step="any" />
+            <div class="botoes-imc">
+                <button id="calcular-imc-masculino">Calcular IMC Masculino</button>
+                <button id="calcular-imc-feminino">Calcular IMC Feminino</button>
+            </div>
+            <p id="resultado-imc"></p>
+        </div>
+    `;
+
+    const btnMasculino = document.getElementById('calcular-imc-masculino');
+    const btnFeminino = document.getElementById('calcular-imc-feminino');
+    const resultadoEl = document.getElementById('resultado-imc');
+
+    function calcularImcComGenero(genero) {
+        const inputPeso = document.getElementById('input-peso');
+        const inputAltura = document.getElementById('input-altura');
+        const peso = parseFloat(inputPeso.value.replace(',', '.'));
+        let altura = parseFloat(inputAltura.value.replace(',', '.'));
+
+        if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
+            resultadoEl.textContent = 'Por favor, insira peso e altura válidos.';
+            return;
+        }
+
+        if (altura > 3) {
+            altura = altura / 100;
+        }
+
+        const imc = peso / (altura * altura);
+        const categoria = calcularCategoriaImc(imc);
+        resultadoEl.textContent = `${genero}: IMC = ${imc.toFixed(2)} — ${categoria}.`;
+    }
+
+    if (btnMasculino) {
+        btnMasculino.addEventListener('click', () => calcularImcComGenero('Masculino'));
+    }
+
+    if (btnFeminino) {
+        btnFeminino.addEventListener('click', () => calcularImcComGenero('Feminino'));
     }
 }
 
