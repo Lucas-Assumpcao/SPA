@@ -1,8 +1,10 @@
 const pai = document.getElementById('eventos-pai');
 
 pai.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link || !pai.contains(link)) return;
     e.preventDefault();
-    const id = e.target.id;
+    const id = link.id;
     if (id === 'velocidade') {
         calculoVelocidade();
     } else if (id === 'massa') {
