@@ -9,6 +9,8 @@ pai.addEventListener('click', (e) => {
         calculoVelocidade();
     } else if (id === 'massa') {
         calculoMassa();
+    } else if (id === 'tres') {
+        calculoTres();
     } else {
         clearMain();
     }
@@ -132,6 +134,53 @@ function calculoMassa() {
             } else {
                 resultadoEl.textContent = 'Por favor, insira um valor numérico válido.';
             }
+        });
+    }
+}
+
+function calculoTres() {
+    const main = document.querySelector('main');
+    if (!main) return;
+
+    main.innerHTML = `
+        <h2>Regra de Três</h2>
+        <div class="calc-tres">
+            <label for="input-a">Valor A:</label>
+            <input id="input-a" type="number" step="any" />
+            <label for="input-b">Valor B:</label>
+            <input id="input-b" type="number" step="any" />
+            <label for="input-c">Valor C:</label>
+            <input id="input-c" type="number" step="any" />
+            <button id="calcular-tres">Calcular x</button>
+            <p id="resultado-tres"></p>
+        </div>
+    `;
+
+    const btnCalcularTres = document.getElementById('calcular-tres');
+    const resultadoEl = document.getElementById('resultado-tres');
+
+    if (btnCalcularTres) {
+        btnCalcularTres.addEventListener('click', () => {
+            const inputA = document.getElementById('input-a');
+            const inputB = document.getElementById('input-b');
+            const inputC = document.getElementById('input-c');
+
+            const valorA = parseFloat(inputA.value);
+            const valorB = parseFloat(inputB.value);
+            const valorC = parseFloat(inputC.value);
+
+            if (isNaN(valorA) || isNaN(valorB) || isNaN(valorC)) {
+                resultadoEl.textContent = 'Por favor, insira valores numéricos válidos em todos os campos.';
+                return;
+            }
+
+            if (valorA === 0 || valorB === 0 || valorC === 0) {
+                resultadoEl.textContent = 'Erro: nenhum valor pode ser zero. Ajuste os valores e tente novamente.';
+                return;
+            }
+
+            const resultadoX = (valorB * valorC) / valorA;
+            resultadoEl.textContent = `x = ${resultadoX.toFixed(2)} (a partir de A/B = C/x).`;
         });
     }
 }
