@@ -93,16 +93,18 @@ function calculoMassa() {
     main.innerHTML = `
         <h2>Calculadora de Massa</h2>
         <div class="calc-massa">
-            <label for="input-massa">Valor em kg:</label>
+            <label for="input-massa">Valor em kg ou lbs:</label>
             <input id="input-massa" type="number" step="any" />
             <div class="botoes-massa">
                 <button id="converter-kg-lbs">Converter kg para lbs</button>
+                <button id="converter-lbs-kg">Converter lbs para kg</button>
             </div>
             <p id="resultado-massa"></p>
         </div>
     `;
 
     const btnKgToLbs = document.getElementById('converter-kg-lbs');
+    const btnLbsToKg = document.getElementById('converter-lbs-kg');
     const resultadoEl = document.getElementById('resultado-massa');
 
     if (btnKgToLbs) {
@@ -113,6 +115,20 @@ function calculoMassa() {
             if (!isNaN(kgValue)) {
                 const lbsValue = kgParaLbs(kgValue);
                 resultadoEl.textContent = `${kgValue} kg é igual a ${lbsValue.toFixed(2)} lbs.`;
+            } else {
+                resultadoEl.textContent = 'Por favor, insira um valor numérico válido.';
+            }
+        });
+    }
+
+    if (btnLbsToKg) {
+        btnLbsToKg.addEventListener('click', () => {
+            const inputMassa = document.getElementById('input-massa');
+            const lbsValue = parseFloat(inputMassa.value);
+
+            if (!isNaN(lbsValue)) {
+                const kgValue = lbsParaKg(lbsValue);
+                resultadoEl.textContent = `${lbsValue} lbs é igual a ${kgValue.toFixed(2)} kg.`;
             } else {
                 resultadoEl.textContent = 'Por favor, insira um valor numérico válido.';
             }
