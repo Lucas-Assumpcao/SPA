@@ -13,6 +13,8 @@ pai.addEventListener('click', (e) => {
         calculoMassa();
     } else if (id === 'tres') {
         calculoTres();
+    } else if (id === 'conversor') {
+        calculoConversor();
     } else {
         clearMain();
     }
@@ -197,6 +199,93 @@ function calculoMassa() {
             }
         });
     }
+}
+
+
+function formatCurrency(value, currency) {
+    const locales = currency === 'BRL' ? 'pt-BR' : 'en-US';
+    return new Intl.NumberFormat(locales, { style: 'currency', currency }).format(value);
+}
+
+function calculoConversor() {
+    const main = document.querySelector('main');
+    if (!main) return;
+
+    main.innerHTML = `
+        <h2>Conversor USD ↔ BRL</h2>
+        <div class="calc-conversor">
+            <label for="input-valor">Valor:</label>
+            <input id="input-valor" type="number" step="any" />
+            <div class="botoes-conversor">
+                <button id="converter-usd-brl">Converter USD → BRL</button>
+                <button id="converter-brl-usd">Converter BRL → USD</button>
+            </div>
+            <p id="resultado-conversor"></p>
+            <p id="status-conversor" aria-live="polite"></p>
+        </div>
+    `;
+
+    const btnUsdToBrl = document.getElementById('converter-usd-brl');
+    const btnBrlToUsd = document.getElementById('converter-brl-usd');
+    const resultadoEl = document.getElementById('resultado-conversor');
+    const statusEl = document.getElementById('status-conversor');
+
+    async function convertUsdToBrl(amount) {
+        const res = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const key = Object.keys(data)[0];
+        const bid = parseFloat(data[key]?.bid);
+        if (isNaN(bid)) throw new Error('Cotação inválida');
+        return amount * bid;
+    }
+
+    if (btnUsdToBrl) btnUsdToBrl.addEventListener('click', async () => {
+        const raw = document.getElementById('input-valor').value;
+        const amount = parseFloat(String(raw).replace(',', '.'));
+        if (isNaN(amount) || amount <= 0) {
+            resultadoEl.textContent = 'Insira um valor numérico maior que zero.';
+            return;
+        }
+        statusEl.textContent = 'Buscando cotação...';
+        resultadoEl.textContent = '';
+        try {
+            const brl = await convertUsdToBrl(amount);
+            resultadoEl.textContent = `${formatCurrency(amount, 'USD')} = ${formatCurrency(brl, 'BRL')}`;
+        } catch (e) {
+            resultadoEl.textContent = 'Erro: ' + e.message;
+        } finally {
+            statusEl.textContent = '';
+        }
+    });
+
+    if (btnBrlToUsd) btnBrlToUsd.addEventListener('click', async () => {
+        const raw = document.getElementById('input-valor').value;
+        const amount = parseFloat(String(raw).replace(',', '.'));
+        if (isNaN(amount) || amount <= 0) {
+            resultadoEl.textContent = 'Insira um valor numérico maior que zero.';
+            return;
+        }
+        statusEl.textContent = 'Buscando cotação...';
+        resultadoEl.textContent = '';
+        try {
+            const brlToUsd = async (brlAmount) => {
+                const res = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                const key = Object.keys(data)[0];
+                const bid = parseFloat(data[key]?.bid);
+                if (isNaN(bid)) throw new Error('Cotação inválida');
+                return brlAmount / bid;
+            };
+            const usd = await brlToUsd(amount);
+            resultadoEl.textContent = `${formatCurrency(amount, 'BRL')} = ${formatCurrency(usd, 'USD')}`;
+        } catch (e) {
+            resultadoEl.textContent = 'Erro: ' + e.message;
+        } finally {
+            statusEl.textContent = '';
+        }
+    });
 }
 
 function calculoTres() {
