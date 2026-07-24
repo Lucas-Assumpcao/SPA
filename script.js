@@ -92,10 +92,17 @@ function calculoVelocidade() {
     }
 }
 
-function calcularCategoriaImc(imc) {
+function calcularCategoriaImcMasc(imc) {
     if (imc < 18.5) return 'Abaixo do peso';
     if (imc < 25) return 'Peso normal';
     if (imc < 30) return 'Sobrepeso';
+    return 'Obesidade';
+}
+
+function calcularCategoriaImcFem(imc) {
+    if (imc < 18.5) return 'Abaixo do peso';
+    if (imc < 24) return 'Peso normal';
+    if (imc < 29) return 'Sobrepeso';
     return 'Obesidade';
 }
 
