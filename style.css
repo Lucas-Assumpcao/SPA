@@ -1,120 +1,383 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body.body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
 }
-
 
 header {
     background-color: #333;
     color: white;
-    padding: 10px 0;
+    padding: 15px 20px;
     text-align: center;
-    width: 100vw;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
+    position: relative;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    flex: 1;
+    font-size: 24px;
+    text-align: center;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: opacity 0.3s;
+}
+
+.menu-toggle:hover {
+    opacity: 0.8;
 }
 
 .pai {
     width: 260px;
     background: #222;
-    padding: 90px 0 0 0;
-    min-height: 100vh;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+    min-height: calc(100vh - 80px);
+    padding: 20px 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     position: fixed;
-    z-index: 5;
+    left: 0;
+    top: 60px;
+    bottom: 0;
+    z-index: 50;
+    transition: transform 0.3s ease;
+}
+
+.pai.hidden {
+    transform: translateX(-100%);
 }
 
 .pai ul {
     list-style-type: none;
-    padding: 0 0 0 5px;
+    padding: 0;
     margin: 0;
     width: 100%;
 }
+
 .pai li {
-    margin: 60px 0;
+    margin: 0;
     width: 100%;
+    border-bottom: 1px solid #333;
 }
+
 .pai a {
     display: block;
-    width: 75%;
-    padding: 12px 18px;
+    padding: 15px 18px;
     background: #444;
     color: #fff;
-    border-radius: 6px;
+    border-radius: 0;
     font-size: 14px;
     font-weight: 500;
     text-decoration: none;
     transition: background 0.2s, color 0.2s, transform 0.1s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    width: 100%;
 }
+
 .pai a:hover {
     background: #007BFF;
     color: #fff;
-    transform: translateX(6px) scale(1.04);
+    transform: translateX(6px);
 }
 
 .main {
     margin-left: 260px;
-    padding: 110px 30px 30px 30px;
-    width: 100%;
+    padding: 30px;
+    flex: 1;
     text-align: center;
-    
-
+    animation: fadeIn 0.3s ease;
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0.8;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 footer {
     background-color: #333;
     color: white;
     text-align: center;
-    padding: 15px 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
+    padding: 20px;
+    margin-left: 260px;
     z-index: 10;
 }
 
-.calc-imc {
+/* Estilos para inputs e formulários */
+.calc-imc,
+.calc-vel,
+.calc-massa,
+.calc-conversor,
+.calc-tres,
+.calc-temperatura {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    max-width: 460px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
-.calc-imc input {
+.calc-imc input,
+.calc-vel input,
+.calc-massa input,
+.calc-conversor input,
+.calc-tres input,
+.calc-temperatura input {
     width: 100%;
-    max-width: 260px;
-    padding: 10px;
+    max-width: 300px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
 }
 
-.botoes-imc {
+.calc-imc input:focus,
+.calc-vel input:focus,
+.calc-massa input:focus,
+.calc-conversor input:focus,
+.calc-tres input:focus,
+.calc-temperatura input:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.botoes-imc,
+.botoes-velocidade,
+.botoes-massa,
+.botoes-conversor,
+.botoes-tres,
+.botoes-temperatura {
     display: flex;
     justify-content: center;
     gap: 8px;
     margin-top: 10px;
+    flex-wrap: wrap;
 }
 
-.botoes-imc button {
-    padding: 8px 12px;
+.botoes-imc button,
+.botoes-velocidade button,
+.botoes-massa button,
+.botoes-conversor button,
+.botoes-tres button,
+.botoes-temperatura button {
+    padding: 12px 16px;
     border: 1px solid #ccc;
     background: #fff;
     color: #333;
     border-radius: 4px;
     cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.botoes-imc button:hover,
+.botoes-velocidade button:hover,
+.botoes-massa button:hover,
+.botoes-conversor button:hover,
+.botoes-tres button:hover,
+.botoes-temperatura button:hover {
+    background: #007BFF;
+    border-color: #007BFF;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+#resultado-imc,
+#resultado-velocidade,
+#resultado-massa,
+#resultado-conversor,
+#resultado-tres,
+#resultado-temperatura {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    min-height: 20px;
+}
+
+#status-conversor {
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Responsividade para tablets e telas médias */
+@media (max-width: 1024px) {
+    .main {
+        margin-left: 200px;
+        padding: 20px;
+    }
+
+    footer {
+        margin-left: 200px;
+    }
+
+    .pai {
+        width: 200px;
+    }
+
+    header h1 {
+        font-size: 20px;
+    }
+}
+
+/* Responsividade para mobile */
+@media (max-width: 768px) {
+    header {
+        padding: 12px 15px;
+    }
+
+    header h1 {
+        font-size: 18px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .pai {
+        width: 100%;
+        min-height: auto;
+        max-height: calc(100vh - 60px);
+        overflow-y: auto;
+        border-radius: 0;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 15px;
+        padding-bottom: 80px;
+    }
+
+    footer {
+        margin-left: 0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 15px 10px;
+        font-size: 12px;
+    }
+
+    .calc-imc input,
+    .calc-vel input,
+    .calc-massa input,
+    .calc-conversor input,
+    .calc-tres input,
+    .calc-temperatura input {
+        max-width: 100%;
+    }
+
+    .botoes-imc,
+    .botoes-velocidade,
+    .botoes-massa,
+    .botoes-conversor,
+    .botoes-tres,
+    .botoes-temperatura {
+        gap: 6px;
+    }
+
+    .botoes-imc button,
+    .botoes-velocidade button,
+    .botoes-massa button,
+    .botoes-conversor button,
+    .botoes-tres button,
+    .botoes-temperatura button {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .main {
+        max-width: 100%;
+    }
+}
+
+/* Responsividade para celulares pequenos */
+@media (max-width: 480px) {
+    header {
+        padding: 10px 12px;
+    }
+
+    header h1 {
+        font-size: 16px;
+    }
+
+    .main {
+        padding: 10px;
+        padding-bottom: 80px;
+    }
+
+    footer {
+        padding: 10px 8px;
+        font-size: 11px;
+    }
+
+    .calc-imc input,
+    .calc-vel input,
+    .calc-massa input,
+    .calc-conversor input,
+    .calc-tres input,
+    .calc-temperatura input {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .botoes-imc,
+    .botoes-velocidade,
+    .botoes-massa,
+    .botoes-conversor,
+    .botoes-tres,
+    .botoes-temperatura {
+        gap: 4px;
+    }
+
+    .botoes-imc button,
+    .botoes-velocidade button,
+    .botoes-massa button,
+    .botoes-conversor button,
+    .botoes-tres button,
+    .botoes-temperatura button {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-size: 14px;
+    }
 }
 
 .botoes-imc button:hover {

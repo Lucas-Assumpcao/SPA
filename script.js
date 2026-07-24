@@ -1,3 +1,20 @@
+// Menu hamburger toggle
+const menuToggle = document.getElementById('menu-toggle');
+const navMenu = document.getElementById('nav-menu');
+
+if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('hidden');
+    });
+}
+
+// Fechar menu ao clicar em um link
+document.getElementById('eventos-pai').addEventListener('click', () => {
+    if (window.innerWidth <= 768) {
+        navMenu.classList.add('hidden');
+    }
+});
+
 const pai = document.getElementById('eventos-pai');
 
 pai.addEventListener('click', (e) => {
